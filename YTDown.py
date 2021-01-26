@@ -52,7 +52,7 @@ Author --> JuanjoCG |  Release --> V.1
 -----------------------------------------
             """)
 
-def getMediaStreams():  # DEBUG FUNTION 
+def getMediaStreams():  # DEBUG FUNCTION 
 
     if VIDEO_PASSED_IN_ARGUMENTS: 
         return youtubeVideo.streams.order_by('resolution')
