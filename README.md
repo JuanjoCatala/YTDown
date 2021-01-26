@@ -1,5 +1,4 @@
 # YTDown
-Download any YouTube video or playlist with this cool python script! 
 
 ## Table of contents
 * [General info](#general-info)
@@ -41,9 +40,9 @@ YTDown.py hashes
 
 >NOTE: Url MUST be in quotes (""). Some characters could confuse the shell
 
-`$ python3 -v -u [VIDEO URL] -o [OUTPUT PATH]
+`$ python3 -v -u [VIDEO URL] -o [OUTPUT PATH]`
 
-`$ python3 -p -u [PLAYLIST URL] -o [OUTPUT PATH]
+`$ python3 -p -u [PLAYLIST URL] -o [OUTPUT PATH]`
 
 ![alt text](example.png)
 
