@@ -3,7 +3,7 @@ import os
 import shutil
 import sys
 import argparse
-from pytube import YouTube, Playlist, exceptions
+import pytube 
 import urllib.error
 
 # ---- setting up the arguments ------
@@ -30,11 +30,16 @@ PLAYLIST_PASSED_IN_ARGUMENTS = bool(arguments.playlist)
 # ------- Creating Youtube and Playlist objects ----
 
 if VIDEO_PASSED_IN_ARGUMENTS:
-    youtubeVideo = YouTube(VIDEO_URL)
+    youtubeVideo = pytube.YouTube(VIDEO_URL)
 
 elif PLAYLIST_PASSED_IN_ARGUMENTS:
-    youtubePlaylist = Playlist(VIDEO_URL)
+    youtubePlaylist = pytube.Playlist(VIDEO_URL)
 
+# ------- More variables -------
+
+if PLAYLIST_PASSED_IN_ARGUMENTS:
+    PLAYLIST_VIDEOS_URL = youtubePlaylist.video_urls
+    NUMBER_OF_VIDEOS_IN_PLAYLIST = len(PLAYLIST_VIDEOS_URL)
 
 # --------- functions ----------
 
@@ -59,7 +64,7 @@ __   _______ ____
   |_|   |_| |____/ \___/ \_/\_/ |_| |_|
               
 -----------------------------------------
-Author --> JuanjoCG |  Release --> V 1.2
+Author --> JuanjoCG |  Release --> V 1.4
 -----------------------------------------
     """)
 
@@ -78,7 +83,8 @@ def downloadVideo():
 
 def downloadPlaylist():
     
-    print("Playlist name = '" + youtubePlaylist.title + "'" + "\n")
+    print("Playlist name = '" + youtubePlaylist.title + "'")
+    print("Number of videos = " + str(NUMBER_OF_VIDEOS_IN_PLAYLIST) + "\n")
     createDir(youtubePlaylist.title)
     changeActualPath(youtubePlaylist.title)
     
@@ -86,6 +92,7 @@ def downloadPlaylist():
     
     for video in youtubePlaylist.videos:
         print("\n" + "[" + str(counter) + "] Downloading --> '" + video.title + "'" + "\n")
+        
         try:
             video.streams.get_highest_resolution().download()
         
@@ -131,7 +138,7 @@ def replaceIlegalCharacters(filename):
     return filename
 
 def createDir(name):
-    os.mkdir(name) 
+        os.mkdir(name) 
 
 def removeDir(name):
     shutil.rmtree(name)
@@ -162,17 +169,20 @@ def overwriteDirectoryMessage():
 def videoFailedDownloadingOutputMessage(videoName, counter):
     print("[HTTP ERROR] --> '" + str(counter) + " - " + videoName + "' download failed")
     with open("0 - error_log.txt", "a") as f:
-        f.write("Failed --> " + str(counter) + " - " + videoName + "\n")
+        f.write("Failed --> " + str(counter) + " - " + videoName)
+        f.write("[" + PLAYLIST_VIDEOS_URL[counter-1] + "] \n")
 
 def videoIsPrivateOutputMessage(videoName, counter):
     print("[PRIVATE VIDEO] --> '" + str(counter) + " - " + videoName + "' is private!")
     with open("0 - error_log.txt", "a") as f:
-        f.write("Private --> " + str(counter) + " - " + videoName + "\n")
+        f.write("Private --> " + str(counter) + " - " + videoName)
+        f.write("[" + PLAYLIST_VIDEOS_URL[counter-1] + "] \n")
 
 def videoIsRemovedOutputMessage(videoName, counter):
     print("[REMOVED VIDEO] --> '" + str(counter) + " - " + videoName + "' is removed!")
     with open("0 - error_log.txt", "a") as f:
-        f.write("Removed --> " + str(counter) + " - " + videoName + "\n")
+        f.write("Removed --> " + str(counter) + " - " + videoName)
+        f.write("[" + PLAYLIST_VIDEOS_URL[counter-1] + "] \n")
 
 
 
@@ -182,17 +192,6 @@ def ErrorInFilenameMessage():
 
 It seems that something gone bad while sorting the filenames!.
 What a lucky person!
-
-Please, report this bug on:
-
-https://github.com/JuanjoCatala/YTDown/issues
-""")
-
-def httpErrorMessage():
-    print("""
-[HTTPError] - Ouh! WTF?
-
-HTTP ERROR 500: Service unavailable :(
 
 Please, report this bug on:
 
@@ -218,14 +217,5 @@ except FileExistsError:
 except FileNotFoundError:
     ErrorInFilenameMessage()
 
-except pytube.exceptions.VideoPrivate:
-    print("Ouh! the video I tried to download is private!")
-
-except urllib.error.HTTPError:
-    httpErrorMessage()
-    sys.exit()
-
-except pytube.exceptions.VideoUnavailable:
-    print("Oub! the video I tried to download is private!")
 except KeyboardInterrupt:
     sys.exit()

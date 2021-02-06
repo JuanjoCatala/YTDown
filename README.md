@@ -6,7 +6,7 @@
 * [Capabilities](#capabilities)
 * [Setup](#setup)
 * [Examples](#Examples)
-* [Features to add](#Features-to-add)
+* [Todo](#Todo)
 
 
 ## General info
@@ -21,13 +21,13 @@
 ## Checksums
 YTDown.py hashes
 
->Md5 --> `84682e5e0db93a7f3d9e9741d53da9d2`
+>Md5 --> `947b695302a3745986f47bbcdeaeac95`
 
->Sha1 --> `6fbb5d561c8743e08f517ff2401724a5f78b0a37`
+>Sha1 --> `9dacbbb57588e4646f49bcf28807cf65fc02ca99`
 
->Sha256 --> `3442a5726b8508e8e565ad3b12368e61f393d082d12787d4e20ba6c2087b1649`
+>Sha256 --> `22c0b13dccbaefb395cf2c0c8ab26d33b4b9d936f488f8c02838bbaed5a7967a`
 
->Sha512 --> `3442a5726b8508e8e565ad3b12368e61f393d082d12787d4e20ba6c2087b1649`
+>Sha512 --> `4b9d3775b30fcf5305297218f4da7f22a6fed430fb9e7f845c88ca3601293f99d3fa9ca00c7c189169638c955c8d3582e7871acced7a72fbdb1f9ca607109215`
 
 
 ## Setup
@@ -48,6 +48,6 @@ YTDown.py hashes
 
 ![alt text](example.png)
 
-## Features to add
+## Todo
 
->- No ideas!
+>- Catch exceptions in private and removed videos in a playlist.
