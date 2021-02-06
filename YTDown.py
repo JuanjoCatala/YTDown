@@ -86,7 +86,7 @@ def downloadPlaylist():
     print("Playlist name = '" + youtubePlaylist.title + "'")
     print("Number of videos = " + str(NUMBER_OF_VIDEOS_IN_PLAYLIST) + "\n")
     createDir(youtubePlaylist.title)
-    changeActualPath(youtubePlaylist.title)
+    changeActualPath(replaceIlegalCharacters(youtubePlaylist.title))
     
     counter = 1
     
@@ -129,15 +129,15 @@ def getNonPrefixedFilename(filenameList, counter):
             return filename
 
 def replaceIlegalCharacters(filename):
-    ilegalChars = ["/", "<", ">", "|", "?", ":"]
+    ilegalChars = ["/", "<", ">", "|", "?", ":", "\\"]
 
     for char in ilegalChars:
         if char in filename:
-            filename = filename.replace(char, "-")
-
+            filename = filename.replace(char[0], "-")
     return filename
 
 def createDir(name):
+        name = replaceIlegalCharacters(name)
         os.mkdir(name) 
 
 def removeDir(name):
@@ -158,9 +158,9 @@ def renameFile(actualFilename, wantedFilename):
     os.rename(actualFilename, wantedFilename)
 
 def overwriteDirectoryMessage():
-    answer = input("[!] Folder '" + youtubePlaylist.title + "' Already exists. Should I overwrite it? [Y/N] ")
+    answer = input("[!] Folder '" + replaceIlegalCharacters(youtubePlaylist.title) + "' Already exists. Should I overwrite it? [Y/N] ")
     if answer == "Y" or answer == "y" or answer == "S" or answer == "s":
-        removeDir(youtubePlaylist.title)
+        removeDir(replaceIlegalCharacters(youtubePlaylist.title))
         cleanScreen()
         main()
     else:
@@ -214,8 +214,8 @@ try:
 except FileExistsError:
     overwriteDirectoryMessage()
 
-except FileNotFoundError:
-    ErrorInFilenameMessage()
+#except FileNotFoundError:
+#    ErrorInFilenameMessage()
 
 except KeyboardInterrupt:
     sys.exit()
