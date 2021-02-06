@@ -38,8 +38,12 @@ elif PLAYLIST_PASSED_IN_ARGUMENTS:
 # ------- More variables -------
 
 if PLAYLIST_PASSED_IN_ARGUMENTS:
+    PLAYLIST_TITLE = replaceIlegalCharacters(youtubePlaylist.title)
     PLAYLIST_VIDEOS_URL = youtubePlaylist.video_urls
     NUMBER_OF_VIDEOS_IN_PLAYLIST = len(PLAYLIST_VIDEOS_URL)
+
+if VIDEO_PASSED_IN_ARGUMENTS:
+    VIDEO_TITLE = youtubeVideo.title
 
 # --------- functions ----------
 
@@ -78,15 +82,15 @@ def getMediaStreams():  # DEBUG FUNCTION
 
 def downloadVideo():
 
-    print("Downloading --> '" + youtubeVideo.title + "'" + "\n")
+    print("Downloading --> '" + VIDEO_TITLE + "'" + "\n")
     youtubeVideo.streams.get_highest_resolution().download(VIDEO_OUTPUT_PATH)
 
 def downloadPlaylist():
     
-    print("Playlist name = '" + youtubePlaylist.title + "'")
+    print("Playlist name = '" + PLAYLIST_TITLE + "'")
     print("Number of videos = " + str(NUMBER_OF_VIDEOS_IN_PLAYLIST) + "\n")
-    createDir(youtubePlaylist.title)
-    changeActualPath(replaceIlegalCharacters(youtubePlaylist.title))
+    createDir(PLAYLIST_TITLE)
+    changeActualPath(PLAYLIST_TITLE)
     
     counter = 1
     
