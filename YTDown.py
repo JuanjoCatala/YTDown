@@ -3,8 +3,8 @@ import os
 import shutil
 import sys
 import argparse
-from pytube import YouTube, Playlist 
-
+from pytube import YouTube, Playlist, exceptions
+import urllib.error
 
 # ---- setting up the arguments ------
 
@@ -86,10 +86,26 @@ def downloadPlaylist():
     
     for video in youtubePlaylist.videos:
         print("\n" + "[" + str(counter) + "] Downloading --> '" + video.title + "'" + "\n")
-        video.streams.get_highest_resolution().download()
+        try:
+            video.streams.get_highest_resolution().download()
         
-        sortFileNames(video.title, counter)
-        counter += 1
+            sortFileNames(video.title, counter)
+            counter += 1
+
+        except urllib.error.HTTPError:
+            videoFailedDownloadingOutputMessage(video.title, counter)
+            counter += 1
+            pass
+
+        except pytube.exceptions.VideoPrivate:
+            videoIsPrivateOutputMessage(video.title, counter)
+            counter += 1
+            pass
+
+        except pytube.exceptions.VideoUnavailable:
+            videoIsRemovedOutputMessage(video.title, counter)
+            counter += 1
+            pass
 
 def sortFileNames(nameOfVideo, counter):
 
@@ -107,7 +123,7 @@ def getNonPrefixedFilename(filenameList, counter):
 
 def replaceIlegalCharacters(filename):
     ilegalChars = ["/", "<", ">", "|", "?", ":"]
-    
+
     for char in ilegalChars:
         if char in filename:
             filename = filename.replace(char, "-")
@@ -143,6 +159,23 @@ def overwriteDirectoryMessage():
     else:
         sys.exit()
 
+def videoFailedDownloadingOutputMessage(videoName, counter):
+    print("[HTTP ERROR] --> '" + str(counter) + " - " + videoName + "' download failed")
+    with open("0 - error_log.txt", "a") as f:
+        f.write("Failed --> " + str(counter) + " - " + videoName + "\n")
+
+def videoIsPrivateOutputMessage(videoName, counter):
+    print("[PRIVATE VIDEO] --> '" + str(counter) + " - " + videoName + "' is private!")
+    with open("0 - error_log.txt", "a") as f:
+        f.write("Private --> " + str(counter) + " - " + videoName + "\n")
+
+def videoIsRemovedOutputMessage(videoName, counter):
+    print("[REMOVED VIDEO] --> '" + str(counter) + " - " + videoName + "' is removed!")
+    with open("0 - error_log.txt", "a") as f:
+        f.write("Removed --> " + str(counter) + " - " + videoName + "\n")
+
+
+
 def ErrorInFilenameMessage():
     print("""
 [FileNotFoundError] - Ouh! What happened!!??
@@ -159,7 +192,7 @@ def httpErrorMessage():
     print("""
 [HTTPError] - Ouh! WTF?
 
-It seems that something went bad while downloading the video :(
+HTTP ERROR 500: Service unavailable :(
 
 Please, report this bug on:
 
@@ -182,7 +215,7 @@ try:
 except FileExistsError:
     overwriteDirectoryMessage()
 
-except FileNotFoundErrror:
+except FileNotFoundError:
     ErrorInFilenameMessage()
 
 except pytube.exceptions.VideoPrivate:
