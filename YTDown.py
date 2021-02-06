@@ -85,7 +85,7 @@ def downloadPlaylist():
     counter = 1
     
     for video in youtubePlaylist.videos:
-        print("\n" + "Downloading --> '" + video.title + "'" + "\n")
+        print("\n" + "[" + str(counter) + "] Downloading --> '" + video.title + "'" + "\n")
         video.streams.get_highest_resolution().download()
         
         sortFileNames(video.title, counter)
@@ -105,6 +105,15 @@ def getNonPrefixedFilename(filenameList, counter):
         if not filename.split(" -")[0].isnumeric():
             return filename
 
+def replaceIlegalCharacters(filename):
+    ilegalChars = ["/", "<", ">", "|", "?", ":"]
+    
+    for char in ilegalChars:
+        if char in filename:
+            filename = filename.replace(char, "-")
+
+    return filename
+
 def createDir(name):
     os.mkdir(name) 
 
@@ -121,6 +130,8 @@ def moveFile(filename, folder):
     shutil.move(filename, folder)
 
 def renameFile(actualFilename, wantedFilename):
+
+    wantedFilename = replaceIlegalCharacters(wantedFilename)
     os.rename(actualFilename, wantedFilename)
 
 def overwriteDirectoryMessage():
@@ -133,7 +144,7 @@ def overwriteDirectoryMessage():
         sys.exit()
 
 def ErrorInFilenameMessage():
-    print("
+    print("""
 [FileNotFoundError] - Ouh! What happened!!??
 
 It seems that something gone bad while sorting the filenames!.
@@ -142,10 +153,10 @@ What a lucky person!
 Please, report this bug on:
 
 https://github.com/JuanjoCatala/YTDown/issues
-")
+""")
 
 def httpErrorMessage():
-    print("
+    print("""
 [HTTPError] - Ouh! WTF?
 
 It seems that something went bad while downloading the video :(
@@ -153,7 +164,7 @@ It seems that something went bad while downloading the video :(
 Please, report this bug on:
 
 https://github.com/JuanjoCatala/YTDown/issues
-")
+""")
 
 def cleanScreen():
 	if os.name == "posix":
@@ -170,11 +181,18 @@ try:
 
 except FileExistsError:
     overwriteDirectoryMessage()
+
 except FileNotFoundErrror:
     ErrorInFilenameMessage()
+
+except pytube.exceptions.VideoPrivate:
+    print("Ouh! the video I tried to download is private!")
+
 except urllib.error.HTTPError:
     httpErrorMessage()
     sys.exit()
 
+except pytube.exceptions.VideoUnavailable:
+    print("Oub! the video I tried to download is private!")
 except KeyboardInterrupt:
     sys.exit()
