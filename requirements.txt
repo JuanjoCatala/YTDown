@@ -1,3 +1,2 @@
-argparse
-pytube
-urllib
+argparse==1.4.0
+pytube==10.5.1

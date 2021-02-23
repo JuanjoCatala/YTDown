@@ -16,18 +16,18 @@
 
 >- Download videos at maximum resolution
 >- Download playlists at mamixum resoultion
->- (NEW) - Now playlist video are sorted!
+>- (NEW) - Now playlist videos are sorted!
 
 ## Checksums
 YTDown.py hashes
 
->Md5 --> `947b695302a3745986f47bbcdeaeac95`
+>Md5 --> `764f310a641f402ecd8cc90ebcf6daa9`
 
->Sha1 --> `9dacbbb57588e4646f49bcf28807cf65fc02ca99`
+>Sha1 --> `d0743c305159b9cfb74ef97e75cccfd8f1d05ccc`
 
->Sha256 --> `22c0b13dccbaefb395cf2c0c8ab26d33b4b9d936f488f8c02838bbaed5a7967a`
+>Sha256 --> `309efce32e424e55c44e351ae3f7b2c55967d283b0b9aa0e6ae12539bea5ffa3`
 
->Sha512 --> `4b9d3775b30fcf5305297218f4da7f22a6fed430fb9e7f845c88ca3601293f99d3fa9ca00c7c189169638c955c8d3582e7871acced7a72fbdb1f9ca607109215`
+>Sha512 --> `36b42e51f33cd0975edf35fc601e060c03f03d0263245e96394e5f38f35c5aaeba4a6891474bad7781c813ec1f3ae57b8bc2f81e0630c14b336d76f02556c163`
 
 
 ## Setup

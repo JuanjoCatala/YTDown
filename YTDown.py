@@ -38,12 +38,13 @@ elif PLAYLIST_PASSED_IN_ARGUMENTS:
 # ------- More variables -------
 
 if PLAYLIST_PASSED_IN_ARGUMENTS:
-    PLAYLIST_TITLE = replaceIlegalCharacters(youtubePlaylist.title)
+    PLAYLIST_TITLE = youtubePlaylist.title
     PLAYLIST_VIDEOS_URL = youtubePlaylist.video_urls
     NUMBER_OF_VIDEOS_IN_PLAYLIST = len(PLAYLIST_VIDEOS_URL)
 
 if VIDEO_PASSED_IN_ARGUMENTS:
     VIDEO_TITLE = youtubeVideo.title
+    LENTH_IN_SECONDS = float(youtubeVideo.length)
 
 # --------- functions ----------
 
@@ -67,9 +68,9 @@ __   _______ ____
   | |   | | | |_| | (_) \ V  V /| | | |
   |_|   |_| |____/ \___/ \_/\_/ |_| |_|
               
------------------------------------------
-Author --> JuanjoCG |  Release --> V 1.4
------------------------------------------
+------------------------------------------
+Author --> JuanjoCG |  Release --> V 0.4.5
+------------------------------------------
     """)
 
 def getMediaStreams():  # DEBUG FUNCTION 
@@ -82,20 +83,28 @@ def getMediaStreams():  # DEBUG FUNCTION
 
 def downloadVideo():
 
+    VIDEO_LENGTH_IN_
     print("Downloading --> '" + VIDEO_TITLE + "'" + "\n")
     youtubeVideo.streams.get_highest_resolution().download(VIDEO_OUTPUT_PATH)
 
 def downloadPlaylist():
     
+    PLAYLIST_TITLE = replaceIlegalCharacters(youtubePlaylist.title)
+
     print("Playlist name = '" + PLAYLIST_TITLE + "'")
     print("Number of videos = " + str(NUMBER_OF_VIDEOS_IN_PLAYLIST) + "\n")
+    
     createDir(PLAYLIST_TITLE)
     changeActualPath(PLAYLIST_TITLE)
     
     counter = 1
     
     for video in youtubePlaylist.videos:
-        print("\n" + "[" + str(counter) + "] Downloading --> '" + video.title + "'" + "\n")
+
+        VIDEO_LENGTH_IN_MINUTES = str(video.length/60)
+
+        print("\n" + "[" + str(counter) + "] Downloading --> '" + video.title + "'" +
+        "   [" + VIDEO_LENGTH_IN_MINUTES[0:4] + " minutes long]" + "\n")
         
         try:
             video.streams.get_highest_resolution().download()
@@ -107,16 +116,19 @@ def downloadPlaylist():
             videoFailedDownloadingOutputMessage(video.title, counter)
             counter += 1
             pass
+	
+    #------------ TODO (implement manage of exceptions)-----------------------------------
 
-        except pytube.exceptions.VideoPrivate:
-            videoIsPrivateOutputMessage(video.title, counter)
-            counter += 1
-            pass
+       #except pytube.exceptions.VideoPrivate:
+       #    videoIsPrivateOutputMessage(video.title, counter)
+       #    counter += 1
+       #    pass
 
-        except pytube.exceptions.VideoUnavailable:
-            videoIsRemovedOutputMessage(video.title, counter)
-            counter += 1
-            pass
+       #except pytube.exceptions.VideoUnavailable:
+       #    videoIsRemovedOutputMessage(video.title, counter)
+       #    counter += 1
+       #    pass									  
+    #--------------------------------------------------------------------------------------
 
 def sortFileNames(nameOfVideo, counter):
 
@@ -137,7 +149,7 @@ def replaceIlegalCharacters(filename):
 
     for char in ilegalChars:
         if char in filename:
-            filename = filename.replace(char[0], "-")
+            filename = filename.replace(char, "-")
     return filename
 
 def createDir(name):
@@ -173,34 +185,29 @@ def overwriteDirectoryMessage():
 def videoFailedDownloadingOutputMessage(videoName, counter):
     print("[HTTP ERROR] --> '" + str(counter) + " - " + videoName + "' download failed")
     with open("0 - error_log.txt", "a") as f:
-        f.write("Failed --> " + str(counter) + " - " + videoName)
+        f.write("Failed --> " + str(counter) + " - " + videoName + "\n")
         f.write("[" + PLAYLIST_VIDEOS_URL[counter-1] + "] \n")
 
 def videoIsPrivateOutputMessage(videoName, counter):
     print("[PRIVATE VIDEO] --> '" + str(counter) + " - " + videoName + "' is private!")
     with open("0 - error_log.txt", "a") as f:
-        f.write("Private --> " + str(counter) + " - " + videoName)
+        f.write("Private --> " + str(counter) + " - " + videoName + "\n")
         f.write("[" + PLAYLIST_VIDEOS_URL[counter-1] + "] \n")
 
 def videoIsRemovedOutputMessage(videoName, counter):
     print("[REMOVED VIDEO] --> '" + str(counter) + " - " + videoName + "' is removed!")
     with open("0 - error_log.txt", "a") as f:
-        f.write("Removed --> " + str(counter) + " - " + videoName)
+        f.write("Removed --> " + str(counter) + " - " + videoName + "\n")
         f.write("[" + PLAYLIST_VIDEOS_URL[counter-1] + "] \n")
 
-
+def printRegexMatchError():    
+    if VIDEO_PASSED_IN_ARGUMENTS:
+        print("[Regex Error] - Are you sure that is a video?")
+    if PLAYLIST_PASSED_IN_ARGUMENTS:
+        print("[Regex Error] - Are you sure that is a playlist?")
 
 def ErrorInFilenameMessage():
-    print("""
-[FileNotFoundError] - Ouh! What happened!!??
-
-It seems that something gone bad while sorting the filenames!.
-What a lucky person!
-
-Please, report this bug on:
-
-https://github.com/JuanjoCatala/YTDown/issues
-""")
+    print("[FileNotFoundError] - Ouh! What happened!!?? ")
 
 def cleanScreen():
 	if os.name == "posix":
@@ -218,8 +225,11 @@ try:
 except FileExistsError:
     overwriteDirectoryMessage()
 
-#except FileNotFoundError:
-#    ErrorInFilenameMessage()
+except FileNotFoundError:
+    ErrorInFilenameMessage()
 
 except KeyboardInterrupt:
     sys.exit()
+
+except pytube.exceptions.RegexMatchError:
+    printRegexMatchError()
