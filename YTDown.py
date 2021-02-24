@@ -83,8 +83,8 @@ def getMediaStreams():  # DEBUG FUNCTION
 
 def downloadVideo():
 
-    VIDEO_LENGTH_IN_
-    print("Downloading --> '" + VIDEO_TITLE + "'" + "\n")
+    VIDEO_LENGTH_IN_MINUTES = str(youtubeVideo.length/60)
+    print("Downloading --> '" + VIDEO_TITLE + "' [" + VIDEO_LENGTH_IN_MINUTES[0:4] + " minutes long]")
     youtubeVideo.streams.get_highest_resolution().download(VIDEO_OUTPUT_PATH)
 
 def downloadPlaylist():
@@ -117,19 +117,6 @@ def downloadPlaylist():
             counter += 1
             pass
 	
-    #------------ TODO (implement manage of exceptions)-----------------------------------
-
-       #except pytube.exceptions.VideoPrivate:
-       #    videoIsPrivateOutputMessage(video.title, counter)
-       #    counter += 1
-       #    pass
-
-       #except pytube.exceptions.VideoUnavailable:
-       #    videoIsRemovedOutputMessage(video.title, counter)
-       #    counter += 1
-       #    pass									  
-    #--------------------------------------------------------------------------------------
-
 def sortFileNames(nameOfVideo, counter):
 
     actualFilesInDir = getFilenamesInPath() 
