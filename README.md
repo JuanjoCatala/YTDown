@@ -11,23 +11,23 @@
 
 ## General info
 >Download any YouTube video or playlist with this cool python script! 
-
+>(NEW) Cleaner code and more capabilities!
 ## Capabilities
 
 >- Download videos at maximum resolution
->- Download playlists at mamixum resoultion
->- (NEW) - Now playlist videos are sorted!
+>- Download youtube playlists sorted
+>- (NEW) Mixing audio and video with ffmpeg now is supported
 
 ## Checksums
 YTDown.py hashes
 
->Md5 --> `5fb6a142767624dc1731d5fce06cb37c`
+>Md5 --> `94280039c94936a12b58d270fc22c7be`
 
->Sha1 --> `f5f4c1f3c29f355169a8a487af426f36c0dc4720`
+>Sha1 --> `0abacff581cd541d188a8d08b2c9db3936938536`
 
->Sha256 --> `3ef727bad90c5ed8652bac3bed034901e38901b271abb6fd82c8239cff5a4ab5`
+>Sha256 --> `1dce2116cf281032d0dad04baed252b5005d33e6a5b39ccdc9dc922a2877b9f7`
 
->Sha512 --> `2163209c7dfc22493263bc54e9a055588d4f27a333007e938bc7393752a4343e17db4a2862cf68a5e49ae602dec9c28a457b8e0e23791357c77fa4d69f171e6c`
+>Sha512 --> `371bc79fb2882f71a7df69e8aba400e2fe6d1120398c45747270d8083450f09b53df260f7585cc4a3829fc595148ff8d7ae3e73a62d9cdf891ceddd239503fe7`
 
 
 ## Setup
@@ -42,12 +42,16 @@ YTDown.py hashes
 
 >NOTE: Url MUST be in quotes (""). Some characters could confuse the shell
 
-`$ python3 -v -u [VIDEO URL] -o [OUTPUT PATH]`
+> Download the premixed (Video and audio) version of the video. (Sometimes it has not the best resolution)
 
-`$ python3 -p -u [PLAYLIST URL] -o [OUTPUT PATH]`
+`$ python3 ytdown.py -u/--url "[URL]" -o/--output "[OUTPUT_PATH]"`
+
+>Download the video, the audio and then mix them with ffmpeg. (Takes a bit longer, but you can get the best resolution)
+
+`$ python3 ytdown.py -f/--ffmpeg -u/--url "[URL] -o/--output "[OUTPUT_PATH]"`
 
 ![alt text](example.png)
 
 ## Todo
 
->- Catch exceptions in private and removed videos in a playlist.
+>- Nothing for now
