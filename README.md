@@ -21,13 +21,13 @@
 ## Checksums
 YTDown.py hashes
 
->Md5 --> `94280039c94936a12b58d270fc22c7be`
+>Md5 --> `07f5a4af6a96de3b3015d41fe9b558dd`
 
->Sha1 --> `0abacff581cd541d188a8d08b2c9db3936938536`
+>Sha1 --> `7a1a77b424c1403ad69475c0eb7f30592873fbe3`
 
->Sha256 --> `1dce2116cf281032d0dad04baed252b5005d33e6a5b39ccdc9dc922a2877b9f7`
+>Sha256 --> `5da182e84ad5a596ef28887fed971b5bd012a655b1deed406bc6408a7bd795ca`
 
->Sha512 --> `371bc79fb2882f71a7df69e8aba400e2fe6d1120398c45747270d8083450f09b53df260f7585cc4a3829fc595148ff8d7ae3e73a62d9cdf891ceddd239503fe7`
+>Sha512 --> `3f2febcb21aeb0031f31bdb2c1baedad8905b1b5e58e368c11ba5882a4653b89f10a688eb75718aa5725b12410e7736baf27a82137f2d7f9a1fea0e382a5939b`
 
 
 ## Setup
@@ -40,9 +40,9 @@ YTDown.py hashes
 
 ***For basic info:***
 
->NOTE: Url MUST be in quotes (""). Some characters could confuse the shell
+- NOTE: Url MUST be in quotes (""). Some characters could confuse the shell
 
-> Download the premixed (Video and audio) version of the video. (Sometimes it has not the best resolution)
+>Download the premixed (Video and audio) version of the video. (Sometimes it has not the best resolution)
 
 `$ python3 ytdown.py -u/--url "[URL]" -o/--output "[OUTPUT_PATH]"`
 
