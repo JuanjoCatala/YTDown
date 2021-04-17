@@ -11,6 +11,7 @@
 
 ## General info
 >Download any YouTube video or playlist with this cool python script! 
+
 >(NEW) Cleaner code and more capabilities!
 ## Capabilities
 
@@ -54,4 +55,4 @@ YTDown.py hashes
 
 ## Todo
 
->- Nothing for now
+>- Errors in some playlists. I'll fix it
