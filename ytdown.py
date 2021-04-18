@@ -2,11 +2,12 @@
 
 import os
 import sys
+import time
 import shutil
 import argparse
 import pytube
 import ffmpeg
-
+from moviepy.editor import VideoFileClip, AudioFileClip
 
 # Video example --> https://www.youtube.com/watch?v=cGveIvwwSq4
 # Playlist example --> https://www.youtube.com/playlist?list=PLBlnK6fEyqRhX6r2uhhlubuF5QextdCSMw 
@@ -16,7 +17,8 @@ import ffmpeg
 argumentParser = argparse.ArgumentParser(description="Download youtube video and playlists! | Ver 0.0.1")
 argumentParser.add_argument("-u", "--url", type=str, required=True, help="Video/Playlist url")
 argumentParser.add_argument("-o", "--output", type=str, required=True, help="The path where the videos will be stored")
-argumentParser.add_argument("-f", "--ffmpeg", action="store_true", required=False, help="Download video and audio separetely and then mix them")
+argumentParser.add_argument("-f", "--ffmpeg", action="store_true", required=False, help="Mix media with ffmpeg")
+argumentParser.add_argument("-m", "--moviepy", action="store_true", required=False, help="Mix media with moviepy")
 
 arguments = argumentParser.parse_args()
 
@@ -25,7 +27,13 @@ arguments = argumentParser.parse_args()
 runtimePath: str = os.getcwd()
 outputPath: str = arguments.output
 
-ffmpegSelected: bool = arguments.ffmpeg
+if (ffmpegSelected := arguments.ffmpeg):
+	print("\n[!] Video and Audio will be mixed with ffmpeg")
+	time.sleep(1)
+
+if (moviepySelected := arguments.moviepy):
+	print("\n[!] Video and Audio will be mixed with moviepy")
+	time.sleep(1)
 
 url = arguments.url
 
@@ -42,7 +50,7 @@ def mediaIsPlaylist(url:str) -> bool:
 		return False
 
 def parseIlegalChars(name: str) -> str:
-	ilegalChars = ("/", "\\", "<", ">", "|", "?", ":", ",", ".", " ")
+	ilegalChars = ("/", "\\", "<", ">", "|", "?", ":", ",", ".", "&", " ")
 	
 	for char in ilegalChars:
 		if char in name:
@@ -75,7 +83,6 @@ def printVideoInfo(url: str):
 	videoAuthor: str = youtubeVideo.author
 	videoTitle: str = youtubeVideo.title
 	videoLengthInMinutes: str = str(youtubeVideo.length/60)[:4]	
-#	videoSizeInMB: str = (getBestVideoStream(youtubeVideo).filesize/1000000)
 
 	videoCodec = getBestVideoStream(youtubeVideo).parse_codecs()
 	audioCodec = getBestAudioStream(youtubeVideo).parse_codecs()
@@ -84,7 +91,6 @@ def printVideoInfo(url: str):
 	print(f"[*] Channel name --> '{videoAuthor}'")
 	print(f"[*] Video title --> '{videoTitle}'")
 	print(f"[*] Video length --> '{videoLengthInMinutes}' minutes")
-#	print(f"[*] Video size --> {videoSizeInMB} megabytes \n") 
 
 	print(f"[*] Video codec --> {videoCodec}")
 	print(f"[*] Audio codec --> {audioCodec}] \n \n")
@@ -109,27 +115,46 @@ def getBestAudioStream(youtubeVideo):
 def getBestPremixedVideoStream(youtubeVideo):  # premixed video and audio version
 	return youtubeVideo.streams.get_highest_resolution()
 
-def joinVideoAndAudio(youtubeVideo, **kwargs):
+def joinVideoAndAudioWithFFMPEG(youtubeVideo, **kwargs):
 	
 	parsedVideoName: str = parseIlegalChars(youtubeVideo.title)
-	
+	nameWithPrefix = kwargs["prefix"] + " - " + parsedVideoName + ".mp4"
+
 	videoPath = os.path.join(outputPath, "video.mp4")
 	audioPath = os.path.join(outputPath, "audio.mp4")
-	nameWithPrefix = kwargs["prefix"] + " - " + parsedVideoName + ".mp4"
-	joinedVideoPath = os.path.join(outputPath, nameWithPrefix)
+	finalFilePath = os.path.join(outputPath, nameWithPrefix)
 	
 	video = ffmpeg.input(videoPath)
 	audio = ffmpeg.input(audioPath)
 
-	processedVideo = ffmpeg.concat(video, audio, v=1, a=1).output(joinedVideoPath, f="mp4").run()
+	processedVideo = ffmpeg.concat(video, audio, v=1, a=1).output(finalFilePath, f="mp4").run()
+
+def joinVideoAndAudioWithMoviepy(youtubeVideo, **kwargs):
+
+	parsedVideoName = parseIlegalChars(youtubeVideo.title)
+	nameWithPrefix = kwargs["prefix"] + " - " + parsedVideoName + ".mp4"
+
+	videoPath = os.path.join(outputPath, "video.mp4")
+	audioPath = os.path.join(outputPath, "audio.mp4")
+	finalFilePath = os.path.join(outputPath, nameWithPrefix)	
+
+	video = VideoFileClip(videoPath)
+	audio = AudioFileClip(audioPath)
+
+	mixedClip = video.set_audio(audio)
+	mixedClip.write_videofile(finalFilePath)
 
 def downloadVideoAndAudio(url: str, **kwargs):  # audio and video separetely	
 	youtubeVideo = pytube.YouTube(url)	
-	
+
 	getBestVideoStream(youtubeVideo).download(output_path=outputPath, filename="video")
 	getBestAudioStream(youtubeVideo).download(output_path=outputPath, filename="audio")
 	
-	joinVideoAndAudio(youtubeVideo, prefix=kwargs["prefix"])
+	if ffmpegSelected:
+		joinVideoAndAudioWithFFMPEG(youtubeVideo, prefix=kwargs["prefix"])
+
+	elif moviepySelected:
+		joinVideoAndAudioWithMoviepy(youtubeVideo, prefix=kwargs["prefix"])
 
 def downloadVideo(url: str, **kwargs):  # audio and video premixed
 	youtubeVideo = pytube.YouTube(url)
@@ -141,13 +166,6 @@ def downloadVideo(url: str, **kwargs):  # audio and video premixed
 	else:
 		getBestPremixedVideoStream(youtubeVideo).download(output_path=outputPath, filename=parsedVideoName)
 	
-def beginVideoDownloadWithFFMPEG():
-	printVideoInfo(url)
-	
-	downloadVideoAndAudio(url)
-	
-	removeFile(os.path.join(outputPath, "video.mp4"))
-	removeFile(os.path.join(outputPath, "audio.mp4"))
 
 def downloadPlaylist(urls: dict, playlistName: str, playlistLength: int):
 		
@@ -157,14 +175,14 @@ def downloadPlaylist(urls: dict, playlistName: str, playlistLength: int):
 	prefixCounter: int = 1
 	
 	for url in urls:
-		if ffmpegSelected:
+		if ffmpegSelected or moviepySelected:
 			print(f"--------------- {prefixCounter}/{playlistLength} ---------------")
 			printVideoInfo(url)
 
 			try:
 				downloadVideoAndAudio(url, prefix=str(prefixCounter))
-			except:
-				AddVideoToErrorLog(url)
+			except Exception as e:
+				AddVideoToErrorLog(url, e)
 
 			prefixCounter += 1
 		else:
@@ -173,12 +191,20 @@ def downloadPlaylist(urls: dict, playlistName: str, playlistLength: int):
 			
 			try:
 				downloadVideo(url, prefix=str(prefixCounter))	
-			except:
-				AddVideoToErrorLog(url)
+			except Exception as e:
+				AddVideoToErrorLog(url, e)
 
 			prefixCounter += 1
 
 	os.chdir(runtimePath)
+
+def beginVideoDownloadWithMediaMixing():
+	printVideoInfo(url)
+	
+	downloadVideoAndAudio(url)
+	
+	removeFile(os.path.join(outputPath, "video.mp4"))
+	removeFile(os.path.join(outputPath, "audio.mp4"))
 
 def beginVideoDownload():
 	youtubeVideo = pytube.YouTube(url)
@@ -197,18 +223,19 @@ def beginPlaylistDownload():
 
 	downloadPlaylist(playlistVideoUrls, playlistName, playlistLength)
 	
-def AddVideoToErrorLog(url):
+def AddVideoToErrorLog(url: str, e: Exception):
 	with open("0 - erorLog.txt", "a") as f:
 		f.write(f"[{url}] --> Video couldn't be downloaded :( \n")
-		
+		f.write("[*] Exception message: \n")
+		f.write(str(e))
 
 def main():
 	
 	printAuthorAndVersion()	
 
 	if mediaIsVideo(url):
-		if ffmpegSelected:
-			beginVideoDownloadWithFFMPEG()	
+		if ffmpegSelected or moviepySelected:
+			beginVideoDownloadWithMediaMixing()	
 		else:
 			beginVideoDownload()
 

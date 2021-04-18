@@ -17,18 +17,18 @@
 
 >- Download videos at maximum resolution
 >- Download youtube playlists sorted
->- (NEW) Mixing audio and video with ffmpeg now is supported
+>- (NEW) Mixing audio and video with ffmpeg and moviepy is now supported
 
 ## Checksums
 YTDown.py hashes
 
->Md5 --> `07f5a4af6a96de3b3015d41fe9b558dd`
+>Md5 --> `fe0b56800d66885a871d394d3460cc29`
 
->Sha1 --> `7a1a77b424c1403ad69475c0eb7f30592873fbe3`
+>Sha1 --> `8d50ab3dc2c01d76054276888cc7f3a4fc79b240`
 
->Sha256 --> `5da182e84ad5a596ef28887fed971b5bd012a655b1deed406bc6408a7bd795ca`
+>Sha256 --> `cc676a0e657b01d06d3e94ae165286cc702f7ea605036df5c16aed5354d3592f`
 
->Sha512 --> `3f2febcb21aeb0031f31bdb2c1baedad8905b1b5e58e368c11ba5882a4653b89f10a688eb75718aa5725b12410e7736baf27a82137f2d7f9a1fea0e382a5939b`
+>Sha512 --> `66b3c0e54488c0e5c200b3cef19141a44220ab95cf802e71df4134a27b750bebec1632d79f329eb32e1afaaeeaa48c4d6b472cb48e6595a0e2c6376540a6246e`
 
 
 ## Setup
@@ -47,9 +47,10 @@ YTDown.py hashes
 
 `$ python3 ytdown.py -u/--url "[URL]" -o/--output "[OUTPUT_PATH]"`
 
->Download the video, the audio and then mix them with ffmpeg. (Takes a bit longer, but you can get the best resolution)
+>Download the video, the audio and then mix them with ffmpeg. (Takes a longer, but you can get the best resolution)
 
 `$ python3 ytdown.py -f/--ffmpeg -u/--url "[URL] -o/--output "[OUTPUT_PATH]"`
+`$ python3 ytdown.py -m/--moviepy -u/--url "[URL] -o/--output "[OUTPUT_PATH]"`
 
 ![alt text](example.png)
 
