@@ -10,6 +10,7 @@
 
 
 ## General info
+##{FIX NEEDED] I'll do it later xd}
 >Download any YouTube video or playlist with this cool python script! 
 
 >(NEW) Cleaner code and more capabilities!
