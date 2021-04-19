@@ -115,28 +115,47 @@ def getBestAudioStream(youtubeVideo):
 def getBestPremixedVideoStream(youtubeVideo):  # premixed video and audio version
 	return youtubeVideo.streams.get_highest_resolution()
 
-def joinVideoAndAudioWithFFMPEG(youtubeVideo, **kwargs):
+def joinVideoAndAudioWithFFMPEG(youtubeVideo):
 	
 	parsedVideoName: str = parseIlegalChars(youtubeVideo.title)
-	nameWithPrefix = kwargs["prefix"] + " - " + parsedVideoName + ".mp4"
+	
+	outputVideoName: str = f"{parsedVideoName}.mp4"
 
 	videoPath = os.path.join(outputPath, "video.mp4")
 	audioPath = os.path.join(outputPath, "audio.mp4")
-	finalFilePath = os.path.join(outputPath, nameWithPrefix)
+	finalFilePath = os.path.join(outputPath, outputVideoName)
 	
 	video = ffmpeg.input(videoPath)
 	audio = ffmpeg.input(audioPath)
 
 	processedVideo = ffmpeg.concat(video, audio, v=1, a=1).output(finalFilePath, f="mp4").run()
 
-def joinVideoAndAudioWithMoviepy(youtubeVideo, **kwargs):
-
-	parsedVideoName = parseIlegalChars(youtubeVideo.title)
-	nameWithPrefix = kwargs["prefix"] + " - " + parsedVideoName + ".mp4"
+def joinVideoAndAudioWithFFMPEG_withPrefix(youtubeVideo, prefix: int):
+	
+	parsedVideoName: str = parseIlegalChars(youtubeVideo.title)
+	
+	outputVideoName: str = f"{prefix} - {parsedVideoName}.mp4"
 
 	videoPath = os.path.join(outputPath, "video.mp4")
 	audioPath = os.path.join(outputPath, "audio.mp4")
-	finalFilePath = os.path.join(outputPath, nameWithPrefix)	
+	finalFilePath = os.path.join(outputPath, outputVideoName)
+	
+	video = ffmpeg.input(videoPath)
+	audio = ffmpeg.input(audioPath)
+
+	processedVideo = ffmpeg.concat(video, audio, v=1, a=1).output(finalFilePath, f="mp4").run()
+
+
+
+def joinVideoAndAudioWithMoviepy(youtubeVideo):
+
+	parsedVideoName: str = parseIlegalChars(youtubeVideo.title)
+		
+	outputVideoName: str = f"{parsedVideoName}.mp4"
+
+	videoPath = os.path.join(outputPath, "video.mp4")
+	audioPath = os.path.join(outputPath, "audio.mp4")
+	finalFilePath = os.path.join(outputPath, outputVideoName)	
 
 	video = VideoFileClip(videoPath)
 	audio = AudioFileClip(audioPath)
@@ -144,27 +163,59 @@ def joinVideoAndAudioWithMoviepy(youtubeVideo, **kwargs):
 	mixedClip = video.set_audio(audio)
 	mixedClip.write_videofile(finalFilePath)
 
-def downloadVideoAndAudio(url: str, **kwargs):  # audio and video separetely	
+def joinVideoAndAudioWithMoviepy_withPrefix(youtubeVideo, prefix: int):
+
+	parsedVideoName: str = parseIlegalChars(youtubeVideo.title)
+
+	outputVideoName: str =  f"{prefix} - {parsedVideoName}.mp4"
+
+	videoPath = os.path.join(outputPath, "video.mp4")
+	audioPath = os.path.join(outputPath, "audio.mp4")
+	finalFilePath = os.path.join(outputPath, outputVideoName)	
+
+	video = VideoFileClip(videoPath)
+	audio = AudioFileClip(audioPath)
+
+	mixedClip = video.set_audio(audio)
+	mixedClip.write_videofile(finalFilePath)
+
+
+def downloadVideoAndAudio(url: str):  # audio and video separetely	
+	youtubeVideo = pytube.YouTube(url)	
+
+	getBestVideoStream(youtubeVideo).download(output_path=outputPath, filename="video")
+	getBestAudioStream(youtubeVideo).download(output_path=outputPath, filename="audio")
+
+	if ffmpegSelected:
+		joinVideoAndAudioWithFFMPEG(youtubeVideo)
+
+	if moviepySelected:
+		joinVideoAndAudioWithMoviepy(youtubeVideo)
+
+def downloadVideoAndAudio_withPrefix(url: str, prefix: int):  # audio and video separetely	
 	youtubeVideo = pytube.YouTube(url)	
 
 	getBestVideoStream(youtubeVideo).download(output_path=outputPath, filename="video")
 	getBestAudioStream(youtubeVideo).download(output_path=outputPath, filename="audio")
 	
 	if ffmpegSelected:
-		joinVideoAndAudioWithFFMPEG(youtubeVideo, prefix=kwargs["prefix"])
+		joinVideoAndAudioWithFFMPEG_withPrefix(youtubeVideo, prefix)
 
-	elif moviepySelected:
-		joinVideoAndAudioWithMoviepy(youtubeVideo, prefix=kwargs["prefix"])
+	if moviepySelected:
+		joinVideoAndAudioWithMoviepy_withPrefix(youtubeVideo, prefix)
+	
 
-def downloadVideo(url: str, **kwargs):  # audio and video premixed
+def downloadVideo(url: str):  # audio and video premixed
 	youtubeVideo = pytube.YouTube(url)
 	parsedVideoName: str = parseIlegalChars(youtubeVideo.title)
 	
+	getBestPremixedVideoStream(youtubeVideo).download(output_path=outputPath, filename=parsedVideoName)
 
-	if kwargs["prefix"] != None:
-		getBestPremixedVideoStream(youtubeVideo).download(output_path=outputPath, filename=parsedVideoName, filename_prefix=kwargs["prefix"] + " - ")
-	else:
-		getBestPremixedVideoStream(youtubeVideo).download(output_path=outputPath, filename=parsedVideoName)
+def downloadVideo_withPrefix(url: str, prefix: int):  # audio and video premixed
+	youtubeVideo = pytube.YouTube(url)
+	parsedVideoName: str = parseIlegalChars(youtubeVideo.title)
+	
+	getBestPremixedVideoStream(youtubeVideo).download(output_path=outputPath, filename=parsedVideoName, filename_prefix=f"{prefix} - ")
 	
 
 def downloadPlaylist(urls: dict, playlistName: str, playlistLength: int):
@@ -180,7 +231,7 @@ def downloadPlaylist(urls: dict, playlistName: str, playlistLength: int):
 			printVideoInfo(url)
 
 			try:
-				downloadVideoAndAudio(url, prefix=str(prefixCounter))
+				downloadVideoAndAudio_withPrefix(url, prefixCounter)
 			except Exception as e:
 				AddVideoToErrorLog(url, e)
 
@@ -190,7 +241,7 @@ def downloadPlaylist(urls: dict, playlistName: str, playlistLength: int):
 			printVideoInfo(url)
 			
 			try:
-				downloadVideo(url, prefix=str(prefixCounter))	
+				downloadVideo_withPrefix(url, prefixCounter)	
 			except Exception as e:
 				AddVideoToErrorLog(url, e)
 
