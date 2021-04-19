@@ -10,7 +10,6 @@
 
 
 ## General info
-##{FIX NEEDED] I'll do it later xd}
 >Download any YouTube video or playlist with this cool python script! 
 
 >(NEW) Cleaner code and more capabilities!
@@ -23,13 +22,13 @@
 ## Checksums
 YTDown.py hashes
 
->Md5 --> `fe0b56800d66885a871d394d3460cc29`
+>Md5 --> `f2a2c5e9d04c040605d319d1277d7134`
 
->Sha1 --> `8d50ab3dc2c01d76054276888cc7f3a4fc79b240`
+>Sha1 --> `4484f9fe8a2b440c52b2be34eeaf24d3f6a2e524`
 
->Sha256 --> `cc676a0e657b01d06d3e94ae165286cc702f7ea605036df5c16aed5354d3592f`
+>Sha256 --> `18ed29200e1576104daeeac1928ae5d013f0f33fdbf986dd55dd23a21dbc174a`
 
->Sha512 --> `66b3c0e54488c0e5c200b3cef19141a44220ab95cf802e71df4134a27b750bebec1632d79f329eb32e1afaaeeaa48c4d6b472cb48e6595a0e2c6376540a6246e`
+>Sha512 --> `95edebb90b1e6d943345ce5cb5f612b692d42d9a9b6d3fd552c0f962741e844d326aa5978b29b7a3b6a00ed73a694fd10f7a4445388a81f2940c193ddf0e6d1a`
 
 
 ## Setup
@@ -57,4 +56,4 @@ YTDown.py hashes
 
 ## Todo
 
->- Errors in some playlists. I'll fix it
+>- Some playlists may produce errors. I'll try to fix that
