@@ -50,6 +50,7 @@ YTDown.py hashes
 >Download the video, the audio and then mix them with ffmpeg. (Takes a longer, but you can get the best resolution)
 
 `$ python3 ytdown.py -f/--ffmpeg -u/--url "[URL] -o/--output "[OUTPUT_PATH]"`
+
 `$ python3 ytdown.py -m/--moviepy -u/--url "[URL] -o/--output "[OUTPUT_PATH]"`
 
 ![alt text](example.png)
