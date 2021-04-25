@@ -22,13 +22,13 @@
 ## Checksums
 YTDown.py hashes
 
->Md5 --> `f2a2c5e9d04c040605d319d1277d7134`
+>Md5 --> `7faa2cf03d4a263e70265ceb4c12cbcd`
 
->Sha1 --> `4484f9fe8a2b440c52b2be34eeaf24d3f6a2e524`
+>Sha1 --> `6acd1490177587a35337cadfe24866cb96e85d0d`
 
->Sha256 --> `18ed29200e1576104daeeac1928ae5d013f0f33fdbf986dd55dd23a21dbc174a`
+>Sha256 --> `d573e816b0301c9e997bf8a80629b9a3e7bcbd6b642188f94c4eb13f48db0679`
 
->Sha512 --> `95edebb90b1e6d943345ce5cb5f612b692d42d9a9b6d3fd552c0f962741e844d326aa5978b29b7a3b6a00ed73a694fd10f7a4445388a81f2940c193ddf0e6d1a`
+>Sha512 --> `6272314883265a265df0ff4fa771bbd937a345341f322b9144d4fa30250d682ce530e6858ce8ef99c954c66df2b28325e840340536a5a7359d8d1a663e603af8`
 
 
 ## Setup
@@ -57,4 +57,4 @@ YTDown.py hashes
 
 ## Todo
 
->- Some playlists may produce errors. I'll try to fix that
+>- Actually nothing
