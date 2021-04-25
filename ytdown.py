@@ -218,14 +218,22 @@ def downloadVideo_withPrefix(url: str, prefix: int):  # audio and video premixed
 	getBestPremixedVideoStream(youtubeVideo).download(output_path=outputPath, filename=parsedVideoName, filename_prefix=f"{prefix} - ")
 	
 
-def downloadPlaylist(urls: dict, playlistName: str, playlistLength: int):
+def downloadPlaylist(url: str):
 		
+	youtubePlaylist = pytube.Playlist(url)
+
+	playlistName: str = parseIlegalChars(youtubePlaylist.title)
+	playlistUrls: list = youtubePlaylist.video_urls
+	playlistLength: int = len(playlistUrls) 	
+	
+	printPlaylistInfo(url)	
+
 	os.mkdir(playlistName)
 	os.chdir(playlistName)
 
 	prefixCounter: int = 1
 	
-	for url in urls:
+	for url in playlistUrls:
 		if ffmpegSelected or moviepySelected:
 			print(f"--------------- {prefixCounter}/{playlistLength} ---------------")
 			printVideoInfo(url)
@@ -258,21 +266,11 @@ def beginVideoDownloadWithMediaMixing():
 	removeFile(os.path.join(outputPath, "audio.mp4"))
 
 def beginVideoDownload():
-	youtubeVideo = pytube.YouTube(url)
 	printVideoInfo(url)
-
-	downloadVideo(youtubeVideo)
-		
+	downloadVideo(url)
 
 def beginPlaylistDownload():
-	youtubePlaylist = pytube.Playlist(url)
-	printPlaylistInfo(url)
-	
-	playlistVideoUrls: str = youtubePlaylist.video_urls
-	playlistName: str = parseIlegalChars(youtubePlaylist.title)
-	playlistLength: int = len(playlistVideoUrls)
-
-	downloadPlaylist(playlistVideoUrls, playlistName, playlistLength)
+	downloadPlaylist(url)
 	
 def AddVideoToErrorLog(url: str, e: Exception):
 	with open("0 - erorLog.txt", "a") as f:
