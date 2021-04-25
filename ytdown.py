@@ -50,12 +50,13 @@ def mediaIsPlaylist(url:str) -> bool:
 		return False
 
 def parseIlegalChars(name: str) -> str:
-	ilegalChars = ("/", "\\", "<", ">", "|", "?", ":", ",", ".", "&", " ")
+	ilegalChars = ("/", "\\", "<", ">", "|", "?", ":", ",", ".", "&")
 	
+	parsedName = ""
 	for char in ilegalChars:
 		if char in name:
-			name.replace(char, "-")
-	return name
+			parsedName = name.replace(char, "-")
+	return parsedName
 
 def removeFolder(name: str):
 	shutil.rmtree(name)
