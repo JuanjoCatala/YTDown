@@ -37,6 +37,8 @@ if (moviepySelected := arguments.moviepy):
 
 url = arguments.url
 
+# --- defining functions ---
+
 def mediaIsVideo(url: str) -> bool:
 	if url.find("watch?") != -1:  # -1 means string is not found.
 		return True
@@ -240,8 +242,9 @@ def downloadPlaylist(url: str):
 
 			try:
 				downloadVideoAndAudio_withPrefix(url, prefixCounter)
-			except Exception as e:
-				AddVideoToErrorLog(url, e)
+			except:
+				addErrorInfoToErrorLog(url, prefixCounter, str(sys.exc_info()))
+				#addVideoToErrorLog(url, e)   Not working
 
 			prefixCounter += 1
 		else:
@@ -250,8 +253,9 @@ def downloadPlaylist(url: str):
 			
 			try:
 				downloadVideo_withPrefix(url, prefixCounter)	
-			except Exception as e:
-				AddVideoToErrorLog(url, e)
+			except:
+				addErrorInfoToErrorLog(url, prefixCounter, str(sys.exc_info()))
+				#addVideoToErrorLog(url, e)   Not working
 
 			prefixCounter += 1
 
@@ -272,11 +276,21 @@ def beginVideoDownload():
 def beginPlaylistDownload():
 	downloadPlaylist(url)
 	
-def AddVideoToErrorLog(url: str, e: Exception):
+def addVideoToErrorLog(url: str, e: Exception):
+	print(" [Exception handled] Logged in 'errorLog.txt'")
+	
 	with open("0 - erorLog.txt", "a") as f:
-		f.write(f"[{url}] --> Video couldn't be downloaded :( \n")
+		f.write(f"\n[{url}] --> Video couldn't be downloaded :( \n")
 		f.write("[*] Exception message: \n")
-		f.write(str(e))
+		f.write(str(e) + "\n")
+
+def addErrorInfoToErrorLog(url: str, prefix: int, message: str):
+	print(" [Exception handled] Logged in 'errorLog.txt'")
+
+	with open("0 - errorLog.txt", "a") as f:
+		f.write(f"\n[{url}] --> Video with prefix [{prefix}] couldn't be downloaded :( \n")
+		f.write("[*] Error message: \n")
+		f.write(message + "\n")
 
 def main():
 	
