@@ -1,4 +1,4 @@
 argparse==1.4.0
-pytube==10.7.1
+pytube
 moviepy==1.0.3
 python-ffmpeg==1.0.11 
