@@ -56,7 +56,7 @@ YTDown.py hashes
 
 >Log stderr messages
 
-`$ python3 ytdown.py -u [URL] -o [OUTPUT_PATH] 2> errorLog.txt
+`$ python3 ytdown.py -u [URL] -o [OUTPUT_PATH] 2> errorLog.txt`
 
 ![alt text](example.png)
 
