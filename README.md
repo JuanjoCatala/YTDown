@@ -18,17 +18,18 @@
 >- Download videos at maximum resolution
 >- Download youtube playlists sorted
 >- (NEW) Mixing audio and video with ffmpeg and moviepy is now supported
+>- (NEW) Errors are printed in stderr instead of dumping into a file
 
 ## Checksums
 YTDown.py hashes
 
->Md5 --> `a15610bd048059c8bb79ead5dbec31cf`
+>Md5 --> `76ce7bd3b4828c36073376f2bad23ecc`
 
->Sha1 --> `e99d1940ff24a286398a59fb21d613b8968a7ad9`
+>Sha1 --> `47d75373d668f6c3a4f1b6680c0950ec7460f97e`
 
->Sha256 --> `f880da496730137a7c85f14f5bf2d964b0486a1f58f348db1de59a987ee7ae80`
+>Sha256 --> `180a3dc534fedfabcaa584687aace2afe8af86bca0fbd092d8e763d236e44c97`
 
->Sha512 --> `8873d203a0aa49f6a0aec6873251d12d6c782b66235117b0b5d79368bdd3248935acaf73164e162e93b2abd1ef03e1d8dbe6eb14951ca218c0d7c5e018c33bed`
+>Sha512 --> `6cad6aa753dcf5d147b57111efbc7a2fcb165d8cfa14b656df305fa7004d6988724c810ff1bd61897be2bc9cf4968e3a735243b43ce78f4859010b8c1f743b41`
 
 
 ## Setup
@@ -52,6 +53,10 @@ YTDown.py hashes
 `$ python3 ytdown.py -f/--ffmpeg -u/--url "[URL] -o/--output "[OUTPUT_PATH]"`
 
 `$ python3 ytdown.py -m/--moviepy -u/--url "[URL] -o/--output "[OUTPUT_PATH]"`
+
+>Log stderr messages
+
+`$ python3 ytdown.py -u [URL] -o [OUTPUT_PATH] 2> errorLog.txt
 
 ![alt text](example.png)
 
