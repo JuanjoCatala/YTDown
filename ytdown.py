@@ -28,8 +28,8 @@ runtimePath: str = os.getcwd()
 outputPath: str = arguments.output
 
 if (ffmpegSelected := arguments.ffmpeg):
-	print("\n[!] Video and Audio will be mixed with ffmpeg")
-	time.sleep(1)
+    print("\n[!] Video and Audio will be mixed with ffmpeg")
+    time.sleep(1)
 
 if (moviepySelected := arguments.moviepy):
 	print("\n[!] Video and Audio will be mixed with moviepy")
@@ -275,22 +275,14 @@ def beginVideoDownload():
 
 def beginPlaylistDownload():
 	downloadPlaylist(url)
-	
-def addVideoToErrorLog(url: str, e: Exception):
-	print(" [Exception handled] Logged in 'errorLog.txt'")
-	
-	with open("0 - erorLog.txt", "a") as f:
-		f.write(f"\n[{url}] --> Video couldn't be downloaded :( \n")
-		f.write("[*] Exception message: \n")
-		f.write(str(e) + "\n")
 
 def addErrorInfoToErrorLog(url: str, prefix: int, message: str):
-	print(" [Exception handled] Logged in 'errorLog.txt'")
+    print("[Exception handled] \n")
+    stderr(f"[{url}] --> Video with prefix [{prefix}] couldn't be downloaded :(")
+    stderr(f"[*] Error message: {message}\n")
 
-	with open("0 - errorLog.txt", "a") as f:
-		f.write(f"\n[{url}] --> Video with prefix [{prefix}] couldn't be downloaded :( \n")
-		f.write("[*] Error message: \n")
-		f.write(message + "\n")
+def stderr(message: str):
+    sys.stderr.write(f"{message}\n")
 
 def main():
 	
