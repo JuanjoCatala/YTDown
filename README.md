@@ -57,4 +57,4 @@ YTDown.py hashes
 
 ## Todo
 
->- Actually nothing
+>- Fix Illegal Seek when interrupting
